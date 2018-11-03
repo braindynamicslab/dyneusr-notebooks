@@ -201,9 +201,9 @@ def load_studyforrest(n_subjects=-1, n_runs=-1, merge=True):
             labels_img=atlas_paths[0],
             memory="nilearn_cache",
             #low_pass=0.09, high_pass=0.008, 
-            t_r=2.0,
+            #t_r=2.0,
             )
-        masker = masker.fit()
+        labels_arr = masker.fit_transform([atlas_paths[0]])
         
         # low pas filter
         cleaned_ = clean(df_data.values,
@@ -224,7 +224,7 @@ def load_studyforrest(n_subjects=-1, n_runs=-1, merge=True):
         # save masker, x
         dataset.append(Bunch(
             data=df_data.copy().fillna(0.0),
-            meta=df_meta.copy(),#.fillna(-2.0),
+            meta=df_meta.copy().fillna(-2.0),
             encoders=encoders,
             masker=masker,
             atlas=atlas_paths[0],
@@ -237,7 +237,7 @@ def load_studyforrest(n_subjects=-1, n_runs=-1, merge=True):
     if merge:
         dataset = Bunch(
             data=pd.concat((_.data for _ in dataset), ignore_index=True, sort=False).fillna(0.0),
-            meta=pd.concat((_.meta for _ in dataset), ignore_index=True, sort=False),#.fillna(-2.0),
+            meta=pd.concat((_.meta for _ in dataset), ignore_index=True, sort=False).fillna(-2.0),
             encoders=[_.encoders for _ in dataset],
             masker=[_.masker for _ in dataset][0],
             atlas=[_.atlas for _ in dataset][0]
