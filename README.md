@@ -26,11 +26,9 @@ Install
 
 To clone and install DyNeuSR, run the following commands in a command prompt:
 
-	```
 	git clone https://bitbucket.org/braindynamicslab/dyneusr/ ~
 	cd ~/dyneusr
 	pip install -e . -r requirements.txt
-	```
 
 Note, feel free to replace `~` with the path to which you would like to install the `dyneusr` source code.
 
@@ -42,15 +40,12 @@ Usage
 
 To view a Jupyter notebook example, you can run the following command in a command prompt:
 
-	```
 	jupyter notebook /path/to/notebook.ipynb
-	```
 
 
 For example, to view the `01_trefoil_knot` notebook, run the following commands in a command prompt:
 
-	```
 	cd 01_trefoil_knot
 	jupyter notebook 01_trefoil_knot.ipynb
-	```
+
 
