@@ -7,7 +7,8 @@ A public repository of Jupyter notebook tutorials based on [DyNeuSR](https://bit
 Important links
 ===============
 
-- Official DyNeuSR repo: https://bitbucket.org/braindynamicslab/dyneusr/
+- Official DyNeuSR source code repo: https://bitbucket.org/braindynamicslab/dyneusr/
+- Official DyNeuSR-Notebooks repo: https://bitbucket.org/braindynamicslab/dyneusr-notebooks/
 
 
 Dependencies
