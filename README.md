@@ -29,6 +29,7 @@ To clone and install [DyNeuSR](https://bitbucket.org/braindynamicslab/dyneusr/),
 
 	git clone https://bitbucket.org/braindynamicslab/dyneusr/ ~
 	cd ~/dyneusr
+	git checkout -b v0.1.0 tags/0.1.0
 	pip install -e . -r requirements.txt
 
 Note, you can replace the `~` with any path to install the `dyneusr` source code.
