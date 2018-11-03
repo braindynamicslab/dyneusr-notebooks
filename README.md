@@ -41,7 +41,7 @@ Usage
 
 To view a Jupyter notebook example, you can run the following command in a command prompt:
 
-	jupyter notebook /path/to/notebook.ipynb
+	jupyter notebook [notebook.ipynb]
 
 
 For example, to view the `01_trefoil_knot` notebook, run the following commands in a command prompt:
