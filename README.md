@@ -1,7 +1,7 @@
 dyneusr-notebooks
 =================
 
-DyNeuSR-Notebooks is a public repository of Jupyter notebook tutorials based on [DyNeuSR](https://bitbucket.org/braindynamicslab/dyneusr/).
+A public repository of Jupyter notebook tutorials based on [DyNeuSR](https://bitbucket.org/braindynamicslab/dyneusr/).
 
 
 Important links
