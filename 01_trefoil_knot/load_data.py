@@ -53,7 +53,7 @@ def gen_trefoil(size=1000, xyz_sd=0.0):
     # format data bunch
     dataset = Bunch(
         X=X,
-        y=z,#phi,
+        y=-z,#phi,
         index=np.arange(size)
     )
     return dataset
@@ -96,13 +96,12 @@ def load_trefoil(size=[1000], noise=[0.0], y_bins=3, split=True, **kwargs):
         index_ = data_.index
 
         # generate meta        
-        #bins_ = np.linspace(y_.min(), y_.max()+1, num=y_bins+1)[:-1]
         bins_ = np.linspace(y_.min(), y_.max(), num=y_bins+1)[:-1]
         y_ = np.digitize(y_, bins_)
 
         # define cmap, norm
-        cmap_ = plt.get_cmap(kwargs.get('cmap', "nipy_spectral_r"))
-        norm_ = mpl.colors.Normalize(y_.min(), y_.max())
+        cmap_ = plt.get_cmap(kwargs.get('cmap', "tab10"))
+        norm_ = mpl.colors.Normalize(y_.min(), cmap_.N)
 
 
         # store
@@ -154,11 +153,12 @@ def load_trefoil(size=[1000], noise=[0.0], y_bins=3, split=True, **kwargs):
 def scatter3d(X, y=None, c=None, s='z', ax=None, fig=None, view=(90, -90), **kwargs):
     """Plot trefoil knot.
     """   
-    x,y,z = X.T[:3]
     if c is None:
     	c = np.copy(y)
-    cmap = kwargs.get('cmap') or plt.get_cmap("nipy_spectral_r")
-    norm = kwargs.get('norm') or mpl.colors.Normalize(c.min(), c.max())
+    cmap = plt.get_cmap(kwargs.get('cmap', "tab10"))
+    norm = mpl.colors.Normalize(c.min(), cmap.N)
+    # extract x, y, z
+    x,y,z = X.T[:3]
     if s == 'z':
         zbins = np.linspace(z.min(), z.max(), num=10)
         zbins = np.digitize(z, zbins) 
@@ -213,15 +213,17 @@ def scatter3d(X, y=None, c=None, s='z', ax=None, fig=None, view=(90, -90), **kwa
 def tsplot(X, y=None, c=None, s='z', ax=None, fig=None, **kwargs):
     """Plot trefoil knot.
     """   
-    x,y,z = X.T[:3]
     if c is None:
         c = np.copy(y)
-    cmap = kwargs.get('cmap') or plt.get_cmap("nipy_spectral_r")
-    norm = kwargs.get('norm') or mpl.colors.Normalize(-1, c.max())
+    cmap = plt.get_cmap(kwargs.get('cmap', "tab10"))
+    norm = mpl.colors.Normalize(c.min(), cmap.N)
+    # extract x, y, z
+    x,y,z = X.T[:3]
     if s == 'z':
         zbins = np.linspace(z.min(), z.max(), num=10)
         zbins = np.digitize(z, zbins) 
         s = zbins**2
+
 
     # plot data
     fig, axes = plt.subplots(3, 1, figsize=(15,5))
