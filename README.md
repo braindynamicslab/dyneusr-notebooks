@@ -1,7 +1,7 @@
 dyneusr-notebooks
 =================
 
-DyNeuSR-Notebooks is a public repository of Jupyter notebook tutorials using DyNeuSR.
+DyNeuSR-Notebooks is a public repository of Jupyter notebook tutorials based on [DyNeuSR](https://bitbucket.org/braindynamicslab/dyneusr/).
 
 
 Important links
@@ -13,10 +13,10 @@ Important links
 Dependencies
 ============
 
-These notebooks are based on DyNeuSR, and the required dependencies include: 
+These notebooks are based on [DyNeuSR](https://bitbucket.org/braindynamicslab/dyneusr/), and the required dependencies include: 
 
-* DyNeuSR == 0.1.0
-* Kepler-Mapper >= 1.1.5
+* [DyNeuSR](https://bitbucket.org/braindynamicslab/dyneusr/) == 0.1.0
+* [Kepler-Mapper](https://github.com/MLWave/kepler-mapper) >= 1.1.5
 
 For a full list of requirements, see: `requirements.txt`
 
@@ -24,7 +24,7 @@ For a full list of requirements, see: `requirements.txt`
 Install
 =======
 
-To clone and install DyNeuSR, run the following commands in a command prompt:
+To clone and install [DyNeuSR](https://bitbucket.org/braindynamicslab/dyneusr/), run the following commands in a command prompt:
 
 	git clone https://bitbucket.org/braindynamicslab/dyneusr/ ~
 	cd ~/dyneusr
