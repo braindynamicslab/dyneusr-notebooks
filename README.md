@@ -1,7 +1,7 @@
 dyneusr-notebooks
 =================
 
-DyNeuSR Notebooks is a public repository of Jupyter notebook tutorials using DyNeuSR.
+DyNeuSR-Notebooks is a public repository of Jupyter notebook tutorials using DyNeuSR.
 
 
 Important links
@@ -30,7 +30,7 @@ To clone and install DyNeuSR, run the following commands in a command prompt:
 	cd ~/dyneusr
 	pip install -e . -r requirements.txt
 
-Note, feel free to replace `~` with the path to which you would like to install the `dyneusr` source code.
+Note, you can replace the `~` with any path to install the `dyneusr` source code.
 
 For more detailed installation instructions, see: https://bitbucket.org/braindynamicslab/dyneusr/README.md
 
