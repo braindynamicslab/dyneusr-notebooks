@@ -6,6 +6,9 @@
 *.csv
 *.npy
 
+dyneusr_cache/
+nilearn_cache/
+
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
