@@ -17,7 +17,7 @@ import matplotlib.pyplot as plt
 
 import logging
 logger = logging.getLogger(__name__)
-logging.basicConfig(level=logging.INFO)
+logging.basicConfig(level=logging.DEBUG)
 
 import numpy as np
 import pandas as pd 
@@ -80,13 +80,13 @@ def align_meta_to_data(meta, data):
     frames = frames.assign(TR = frames.index.astype(int))
     frames = frames[frames.TR % 2==0]
     frames = frames.iloc[:len(data), :]
-    frames = frames.fillna(-2)
+    frames = frames.fillna(0) #(-2)
     frames = frames.set_index("TR")
     return frames
 
 
 
-def load_studyforrest(n_subjects=-1, n_runs=-1, merge=True):
+def load_studyforrest(n_subjects=-1, n_runs=-1, merge=False):
     """ Loads example data from (data/)
     """
     logger = logging.getLogger(__name__)
@@ -96,7 +96,8 @@ def load_studyforrest(n_subjects=-1, n_runs=-1, merge=True):
     # file path (avmovie only, for now)
     # [1] per-subject data 
     #glob_str = "sub-??/in_bold3Tp2/sub-*_task-avmovie_run-*_bold.nii.gz"
-    glob_str = "sub*/*_task-avmovie_run-*_bold.csv"
+    #glob_str = "sub*/*_task-avmovie_run-*_bold.csv"
+    glob_str = "aggregate/sub-*/shen_fconn/sub-*_task-avmovie_run-*_bold.csv" 
     data_paths = sorted(config.data_dir.glob(glob_str))
 
     # [2] meta data
@@ -116,15 +117,15 @@ def load_studyforrest(n_subjects=-1, n_runs=-1, merge=True):
     atlas_paths = [str(_) for _ in atlas_paths]
 
     # subject, run meta
-    sub_ids = re.findall(r"sub-([0-9]+)", str(data_paths))
-    run_ids = re.findall(r"run-([0-9]+)", str(data_paths))
+    sub_ids = re.findall(r"sub-([0-9]+)", str(list(map(os.path.basename, data_paths))))
+    run_ids = re.findall(r"run-([0-9]+)", str(list(map(os.path.basename, data_paths))))
 
     # check sizes
-    logger.debug('found {} data files'.format(len(data_paths)))
-    logger.debug('      {} subjects'.format(len(set(sub_ids))))
-    logger.debug('      {} runs'.format(len(set(run_ids))))
-    logger.debug('found {} meta data files'.format(len(meta_paths)))
-    logger.debug('found {} mask data files'.format(len(atlas_paths)))
+    logger.info('found {} data files'.format(len(data_paths)))
+    logger.info('      {} subjects'.format(len(set(sub_ids))))
+    logger.info('      {} runs'.format(len(set(run_ids))))
+    logger.info('found {} meta data files'.format(len(meta_paths)))
+    logger.info('found {} mask data files'.format(len(atlas_paths)))
 
     # limit to n_subjects, n_runs
     data_paths = np.r_[data_paths]
@@ -158,7 +159,8 @@ def load_studyforrest(n_subjects=-1, n_runs=-1, merge=True):
 
         # load meta: convert each value to a dict
         # 192.0    204.0    'char=FORREST ... val_neg=0.00'
-        aligned_meta_path = os.path.join(os.path.dirname(data_paths[mask][0]), 'emotions_aligned.csv')
+        #aligned_meta_path = os.path.join(os.path.dirname(data_paths[mask][0]), 'emotions_aligned.csv')
+        aligned_meta_path = str(config.data_dir / 'emotions_aligned.csv')
         if not os.path.exists(aligned_meta_path):
             # process...
             to_dict = lambda _: dict(re.findall(r"(\S+)=(\S+) ?", _))
@@ -218,18 +220,42 @@ def load_studyforrest(n_subjects=-1, n_runs=-1, merge=True):
         #df_zeros[list(df_data.columns.astype(int))] += df_data.values
         #df_data = df_zeros
         df_data = df_data.reindex(columns=atlas_index.astype(str))
+        #df_meta = df_meta.iloc[:len(df_data), :]
+
+        # clean         
+        df_data = df_data.fillna(0.0)
+        df_meta = df_meta.fillna(0.0)
+
+        # drop empty rows
+        df_meta = df_meta.loc[:, df_meta.any(axis=0)]
+        rest = df_meta[['start', 'stop']].eq(0).all(axis=1).astype(float)
+        df_meta = df_meta.assign(
+            valence=df_meta.val_pos - df_meta.val_neg,
+            movie=rest.eq(0).astype(int),
+            rest=rest, 
+        )
+        df_meta = df_meta
+
+        # clean up column names
+        target_names = ['arousal', 'valence', 'val_pos', 'val_neg', 'movie', 'rest']
+        target_names += [_ for _ in df_meta.columns if _.isupper()]
+        df_meta = df_meta.reindex(columns=target_names)
+        target = df_meta.set_index('TR', drop=True).reset_index(drop=True)
 
 
 
         # save masker, x
         dataset.append(Bunch(
-            data=df_data.copy().fillna(0.0),
-            meta=df_meta.copy().fillna(-2.0),
+            data=df_data,
+            meta=df_meta,
             encoders=encoders,
             masker=masker,
             atlas=atlas_paths[0],
-            X=df_data.values.copy(),
-            y=df_meta.values.copy(),
+            X=df_data.values,
+            y=df_meta.values,
+            target=target,
+            target_names=list(target.columns),
+            name='sub{:02d}'.format(sub_id),
             ))
     
     
@@ -237,13 +263,14 @@ def load_studyforrest(n_subjects=-1, n_runs=-1, merge=True):
     if merge:
         dataset = Bunch(
             data=pd.concat((_.data for _ in dataset), ignore_index=True, sort=False).fillna(0.0),
-            meta=pd.concat((_.meta for _ in dataset), ignore_index=True, sort=False).fillna(-2.0),
+            meta=pd.concat((_.meta for _ in dataset), ignore_index=True, sort=False).fillna(0.0), #(-2.0),
             encoders=[_.encoders for _ in dataset],
             masker=[_.masker for _ in dataset][0],
             atlas=[_.atlas for _ in dataset][0]
             )
         dataset.X = dataset.data.values.reshape(-1, dataset.data.shape[-1])
         dataset.y = dataset.meta.values.reshape(-1, dataset.meta.shape[-1])
+        dataset.target = dataset.target.reset_index(drop=True)
 
     return dataset
 

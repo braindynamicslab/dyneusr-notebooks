@@ -53,7 +53,7 @@ def gen_trefoil(size=1000, xyz_sd=0.0):
     # format data bunch
     dataset = Bunch(
         X=X,
-        y=-z,#phi,
+        y=phi,
         index=np.arange(size)
     )
     return dataset
@@ -100,7 +100,7 @@ def load_trefoil(size=[1000], noise=[0.0], y_bins=3, split=True, **kwargs):
         y_ = np.digitize(y_, bins_)
 
         # define cmap, norm
-        cmap_ = plt.get_cmap(kwargs.get('cmap', "tab10"))
+        cmap_ = plt.get_cmap(kwargs.get('cmap', 'brg'), 3)
         norm_ = mpl.colors.Normalize(y_.min(), cmap_.N)
 
 

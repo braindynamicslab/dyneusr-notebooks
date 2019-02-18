@@ -262,6 +262,20 @@
     background-color: transparent;
     width:100%;
   }
+  .menu-button {
+    font-size: 14pt;
+    margin-bottom:0px;
+    border: 0px solid #fff;
+    background-color: transparent;
+    width:100%;
+  }
+  
+  #node-meta table,
+  #node-meta tr,
+  #node-meta td {
+    text-align: center;
+    padding: 5px ;
+  }
      
   </style>
 
@@ -269,7 +283,7 @@
 </head>
 
 
-<body id="light">
+<body id="dark">
 
 <nav class="navbar navbar-inverse navbar-fixed-top">
   <div class="container-fluid">
@@ -280,7 +294,7 @@
       </div>
     </div>
     <ul class="nav navbar-nav navbar-right">
-        <li><a href="#" onclick="toggle_display_mode();">MODE</a></li>
+        <li><a href="#" onclick="toggle_display_mode();">DARK</a></li>
         <li><a href="#" onclick="toggle_meta();">META</span></a></li>
     </ul>
   </div>
@@ -334,13 +348,28 @@ function zoom() {
   
 
 var color_palettes = {
+    'kepler3': ['#0500ff', '#65ff00', '#ff0000'],
+    'kepler5': ['#0500ff', '#00a4ff', '#65ff00', '#ff8c00', '#ff0000'],
+    'kepler15': ['#0500ff', '#0100ff', '#0022ff', '#0064ff', '#00a4ff', 
+               '#00e4ff', '#00ff83', '#65ff00', '#fdff00', '#ffdc00', 
+               '#ffb400', '#ff7800', '#ff5000', '#ff2800', '#ff0000'],
+    
+    'spectral3': ['#9e0142', '#ffffbe', '#5e4fa2'],
+    'spectral5':['#9e0142', '#f98e52', '#ffffbe', '#86cfa5', '#5e4fa2'],
+    'spectral15':['#9e0142', '#c52c4b', '#e2514a', '#f57547', '#fca55d', 
+                  '#feca79', '#fee999', '#ffffbe', '#edf8a3', '#cdeb9d', 
+                  '#a2d9a4', '#6ec5a5', '#47a0b3', '#3f77b5', '#5e4fa2'],
+
+    'viridis3':['#440154', '#21918c', '#fde725'],
+    'viridis5': ['#440154', '#3b528b', '#21918c', '#5ec962', '#fde725'],
+    'viridis15':['#440154', '#481b6d', '#46327e', '#3f4788', '#365c8d', 
+                 '#2e6e8e', '#277f8e', '#21918c', '#1fa187', '#2db27d', 
+                 '#4ac16d', '#73d056', '#a0da39', '#d0e11c', '#fde725'],
+
     'category10': d3.scale.category10().range(),
     'category20': d3.scale.category20().range(),
-    'spectral': ["#d53e4f", "#f46d43", "#fdae61", "#fee08b", "#e6f598", "#abdda4", "#66c2a5", "#3288bd"],
-    'viridis': ["#440154","#3f4788","#2f6b8e","#1f948c","#20a386", "#20a486", "#31b57b", "#40bd72",
-                "#50c46a","#60ca60","#70cf57", "#81d34d","#90d743","#a0da39","#b0dd2f","#c0df25",
-                "#d0e11c","#e2e418","#fde725"]    
-};
+
+    };
 ///////////////////////////////////////////////
 // Helpers
 ///////////////////////////////////////////////
@@ -466,33 +495,89 @@ function draw_force(data) {
   ////////////////////////////////////////////////////
   //// Colors + labels setup
   ////////////////////////////////////////////////////
+  // color by
+  var color_by_options = {};
+  json.nodes.map(function(d,i) {
+      d3.keys(d.proportions).map(function(k) {
+        if (color_by_options[k]!==true) {
+          color_by_options[k] = true;
+        }
+      });
+    });
+  color_by_options = d3.keys(color_by_options);
+  console.log("color_by_options: "+color_by_options);
+
+  var color_by = json.graph.color_by ? json.graph.color_by : color_by_options[0];  
+  console.log("color_by: "+color_by);
+
+
   // colors
-  var groups = d3.set(json.nodes.map(function(d,i) {
-        return d.group;
-      })).values().sort();
+  var groups = {}
   if (typeof json.graph.groups !== "undefined") {
-    groups = d3.set(json.graph.groups.map(function(d,i) {
-        return d
-    })).values().sort();
+    d3.keys(json.graph.groups).map(function(k, i) {
+      groups[k] = json.graph.groups[k];
+    });
   }
+  color_by_options.map(function(k) {
+    console.log(k)
+    groups[k] = {};
+    json.nodes.map(function(d,i) {
+      d.proportions[k].map(function(p,j) {
+        if (groups[k][p.group]!==true) {
+          groups[k][p.group] = true;
+        }
+      })
+    })
+    groups[k] = d3.keys(groups[k]);
+  });
   console.log("groups: "+groups);
+  console.log("groups: "+groups[color_by]);
+
 
   // set custom color palette if defined
-  var color_palette = color_palettes['category10'];
-  if (typeof json.graph.color !== "undefined") {
-    color_palettes['custom'] = json.graph.color;
-    color_palette = color_palettes['custom'];
+  var color_palette_key = 'kepler15';
+  if (groups[color_by].length <= 3) {
+    color_palette_key = 'kepler3';
+  } else if (groups[color_by].length <= 5) {
+    color_palette_key = 'kepler5';
+  } 
+  console.log("color_palette_key: "+color_palette_key);
+
+  var color_palette = color_palettes[color_palette_key];
+  if (typeof json.graph.colors !== "undefined") {
+    d3.keys(json.graph.colors).map(function(k, i) {
+      color_palettes[k] = json.graph.colors[k];      
+    })
+    color_palette = color_palettes[color_by];
+  } else if (typeof json.graph.color !== "undefined") {
+    d3.keys(json.graph.color).map(function(k, i) {
+      color_palettes[k] = json.graph.color[k];      
+    })
+    color_palette = color_palettes[color_by];
   }
   var color = d3.scale.linear()
-    .domain(groups)
+    .domain(groups[color_by])
     .range(color_palette);
   console.log("color.domain: "+color.domain());
   console.log("color.range: "+color.range());
 
-  // color labes
-  var color_labels = json.graph.label ? json.graph.label : groups;  
+  // color labels
+  var color_labels = {};
+  d3.keys(groups).map(function(k, i) {
+    color_labels[k] = groups[k];
+  });
+  if (typeof json.graph.labels !== "undefined") {
+    d3.keys(json.graph.labels).map(function(k, i) {
+      color_labels[k] = json.graph.labels[k]
+    })
+  } else if (typeof json.graph.label !== "undefined") {
+    d3.keys(json.graph.label).map(function(k, i) {
+      color_labels[k] = json.graph.label[k]
+    })
+  }
+
   var color_label = d3.scale.ordinal()
-            .domain(color_labels)
+            .domain(color_labels[color_by])
             .range(color.range());
   console.log("color_label.domain: "+color_label.domain());
   console.log("color_label.range: "+color_label.range());
@@ -512,7 +597,7 @@ function draw_force(data) {
   console.log("data size: "+data_size);
 
   var pie_size = json.nodes.map(d => { 
-    return d3.max(d.proportions.map(p => 
+    return d3.max(d.proportions[color_by].map(p => 
         { return p.row_count; }
             ));
       });
@@ -537,7 +622,7 @@ function draw_force(data) {
       .call(force.drag);
 
   var circle = node.selectAll("path")
-      .data(function(d, i) {return pie(d.proportions); })
+      .data(function(d, i) {return pie(d.proportions[color_by]); })
       .enter()
       .append("svg:path")
         .attr("d", d3.svg.arc().innerRadius(0).outerRadius(function(d, i) {
@@ -589,23 +674,49 @@ function draw_force(data) {
     .html("<h4>Node</h4><div class='well'></div>");
 
   // TODO: use something like this to select from csv the graph to display
+  var menu_color_by = d3.select('#graph-meta')
+    .append("div")
+      .html("<h4>Color By</h4>")
+    .append("div")
+      .attr("class", "well")
+      .attr('id', 'menu-color-by')
+  .append('select')
+    .attr('class', 'menu-choice')
+  var options_color_by = menu_color_by.selectAll("option")
+  .data(color_by_options)
+  .enter().append("option")
+    .attr('value', function (d) {console.log(d); return d;})
+    .text(function (d) {console.log(d); return d;});
+
+  // color palettes
   var menu_colors = d3.select('#graph-meta')
       .append("div")
         .html("<h4>Colors</h4>")
       .append("div")
         .attr("class", "well")
-      //.append("p")
-    //  .attr('id', 'menu-color-palette')
         .attr('id', 'menu-colors')
     .append('select')
       .attr('class', 'menu-choice')
-
   var options_colors = menu_colors.selectAll("option")
     .data(d3.keys(color_palettes))
     .enter().append("option")
       .attr('value', function (d) {console.log(d); return d;})
-      .text(function (d) {console.log(d); return d;});
+      .text(function (d) {console.log(d); return d;})
+      .property("selected", function(d){ return d === color_palette_key; });
 
+  // TODO: use something like this to select from csv the graph to display
+  var button_movie = d3.select('#graph-meta')
+    .append("div")
+      .html("<h4>Movie</h4>")
+    .append("div")
+      .attr("class", "well")
+      .attr('id', 'button-movie')
+  .append('button')
+    .attr('class', 'menu-button')
+    .text('Play')
+
+  
+  
 
     
   // Mouseover effects
@@ -644,14 +755,14 @@ function draw_force(data) {
   function exit_highlight(){
       highlight_node = null;
       if (focus_node===null) {
-        svg.style("cursor","move");
+        svg.style("cursor","pointer");
         node.attr("id", null);
         link.attr("id", null);
       } 
   }
   function exit_focus(){
-  node.attr("id", null);
-  link.attr("id", null);
+    node.attr("id", null);
+    link.attr("id", null);
     set_highlight(highlight_node);
     focus_node = null;
   }
@@ -685,6 +796,9 @@ function draw_force(data) {
       d = focus_node;
     }
     highlight_node = d;
+    if (d===null) {
+      return;
+    }
 
     // set id to highlight
     node.attr("id", function(o,i) {
@@ -703,6 +817,9 @@ function draw_force(data) {
   //    .append("svg")
   //    .attr("width", width)
   //    .attr("height", height)
+  var n_labels = color_label.domain().length;
+  var max_n_labels = d3.max(d3.values(groups).map(v => {return v.length;}));
+  var legend_height = 20 * max_n_labels + 10;
   var legend = d3.select('#graph-meta')
       .append("div")
         .attr("id", "legend")
@@ -712,57 +829,181 @@ function draw_force(data) {
       .append("svg")
         .attr("class", "legend")
         .attr("width", "100%")
-        .attr("height", 20*groups.length+"px");
+        .attr("height", legend_height+"px");
+      
+  // D3 Vertical Legend //////////////////////////
+  var label_style = {w: 100, h: legend_height / n_labels};
+  label_style.font_size = label_style.w / 5 - 4;
+  label_style.x = label_style.w + (label_style.w / 5);
+  label_style.y = label_style.h - (label_style.h - label_style.font_size) / 2;
 
-  //D3 Vertical Legend//////////////////////////
+  // add legend labels 
   glegend = legend.selectAll('.legend')
       .data(color_label.domain().reverse())
       .enter().append('g')
       .attr("transform", function (d, i) {
-        //return "translate("+((20*groups.length/2)-20)+"," + i * 20 + ")";
-        return "translate(0," + i * 20 + ")";
+        return "translate(0," + i * label_style.h + ")";
       });
-
   var gcolors = glegend.append('rect')
-      .attr("x", 0)
-      .attr("y", 0)
-      .attr("width", 20)
-      .attr("height", 20)
+      .attr("x", 5)
+      .attr("y", 5)
+      .attr("width", label_style.w)
+      .attr("height", label_style.h)
       .style("fill", function (d, i) {return color_label(d);})
   var glabels = glegend.append('text')
-      .attr("x", 30)
-      .attr("y", 15)
+      .attr("x", label_style.x) 
+      .attr("y", label_style.y)
       .text(function (d, i) {return d;})
       .attr("class", "legend-text")
       .style("text-anchor", "start")
-      .style("font-size", 15)
+      .style("font-size", label_style.font_size)
 
   
   ////////////////////////////////////////////////////
   //// Color palette selection
   ////////////////////////////////////////////////////         
   // force data to update when menu is changed    
+  d3.select("#menu-color-by select")
+    .on("change", reset_colors);  
+
   d3.select("#menu-colors select")
     .on("change", reset_colors);  
 
   function reset_colors() {
+    // get selected color by 
+    color_by = menu_color_by.property("value");
+    console.log('color_by: '+color_by);
     // get selected color palette
-    var color_palette_key = menu_colors.property("value");
+    color_palette_key = menu_colors.property("value");
     console.log('color_palette: '+color_palette_key);
     // set palette
     color_palette = color_palettes[color_palette_key];
-    color = color.range(color_palette);
+    color = color
+      .domain(groups[color_by])
+      .range(color_palette);
     console.log("color.domain: "+color.domain());
-    console.log("color.range: "+color.range());
-    color_label = color_label.range(color.range());
+    //console.log("color.range: "+color.range());
+    color_label = color_label
+      .domain(color_labels[color_by])
+      .range(color.range());
     console.log("color_label.domain: "+color_label.domain());
-    console.log("color_label.range: "+color_label.range());
+    //console.log("color_label.range: "+color_label.range());
 
+    
+    //////////////////////////////////////////
+    // Reset Legend //////////////////////////
+    //////////////////////////////////////////
+    n_labels = color_label.domain().length;
+    label_style = {w: 100, h: legend_height / n_labels};
+    label_style.font_size = label_style.w / 5 - 4;
+    label_style.x = label_style.w + (label_style.w / 5);
+    label_style.y = label_style.h - (label_style.h - label_style.font_size) / 2;
+
+    glegend.remove('*');
+    glegend = legend.selectAll('.legend')
+        .data(color_label.domain().reverse())
+        .enter().append('g')
+        .attr("transform", function (d, i) {
+          return "translate(0," + i * label_style.h + ")";
+        });
+    var gcolors = glegend.append('rect')
+        .attr("x", 5)
+        .attr("y", 5)
+        .attr("width", label_style.w)
+        .attr("height", label_style.h)
+        .style("fill", function (d, i) {return color_label(d);})
+    var glabels = glegend.append('text')
+        .attr("x", label_style.x)
+        .attr("y", label_style.y)
+        .text(function (d, i) {return d;})
+        .attr("class", "legend-text")
+        .style("text-anchor", "start")
+        .style("font-size", label_style.font_size)
+
+    //////////////////////////////////////////
+    // Reset Nodes  //////////////////////////
+    //////////////////////////////////////////
+    circle.remove('*');
+    circle = node.selectAll("path")
+          .data(function(d, i) {return pie(d.proportions[color_by]);})
+          .enter()
+          .append("svg:path")
+            .attr("d", d3.svg.arc().innerRadius(0).outerRadius(function(d, i) {
+              return pie_norm(d.data.row_count)*0.8;
+            }))
+            .attr("fill", function(d, i) { return color(d.data.group); })
+            .attr("class", "circle");
+    
     // re-color circles, legend
-    circle.attr("fill", function(d, i) { return color(d.data.group); });
-    gcolors.style("fill", function (d, i) {return color_label(d);});
+    //circle.attr("fill", function(d, i) { return color(d.data.group); });
+    //gcolors.style("fill", function (d, i) {return color_label(d);});
   }
 
+
+
+  ////////////////////////////////////////////////////
+  //// Movie
+  ////////////////////////////////////////////////////   
+  d3.select("#button-movie button")
+    .on("click", reset_movie);  
+
+  var movie_playing = null;
+  var focus_i = null;
+  var movie_start_pos = 0;   
+  function reset_movie(e) {
+    if (movie_playing===true) {
+      movie_playing = false;
+      button_movie.text('Replay');
+      return;
+    }
+    // play movie
+    movie_playing = true;
+    button_movie.text('Pause');
+
+    // movie length
+    var n_nodes = data_size; //d3.max(node.each(function(d,i) {return i+1}));
+    var frame_duration = 0.2 * 1000; // 1 fps = 20 / 2
+    var duration = frame_duration * n_nodes;
+
+    // loop over nodes until elapsed >= duration
+    d3.timer(function(elapsed) {
+      // offset by start pos
+      elapsed = elapsed + movie_start_pos;
+
+      // figure out which node to focus
+      focus_i = Math.floor(elapsed / frame_duration);
+      
+      // loop over nodes and focus the focus node
+      node.each(function(d, i) {
+        d.members.map(function(dd, ii) {
+          if (focus_i == dd) {
+            console.log("[movie] TR="+dd+", NodeID="+d.index);
+            set_highlight(d);
+            set_focus(d);
+          }
+        })
+      })
+    
+      if (movie_playing === false) {
+        movie_start_pos = elapsed;
+        button_movie.text('Play');
+        return true; 
+      }
+      if (elapsed >= duration) {
+        focus_i = 0
+        movie_start_pos = 0;
+        movie_playing = true;
+        button_movie.text('Replay');
+        exit_focus();
+        exit_highlight();
+        return false;
+      };
+      return elapsed >= duration;
+    })
+    
+
+  }
+  
 
   ////////////////////////////////////////////////////
   //// SVG width/heigh
