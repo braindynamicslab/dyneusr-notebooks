@@ -16,7 +16,7 @@ Dependencies
 
 These notebooks are based on [DyNeuSR](https://bitbucket.org/braindynamicslab/dyneusr/), and the required dependencies include: 
 
-* [DyNeuSR](https://bitbucket.org/braindynamicslab/dyneusr/) == 0.2.0
+* [DyNeuSR](https://bitbucket.org/braindynamicslab/dyneusr/) == 0.2.2
 * [Kepler-Mapper](https://github.com/MLWave/kepler-mapper) >= 1.1.5
 
 For a full list of requirements, see: `requirements.txt`
@@ -29,7 +29,7 @@ To clone and install [DyNeuSR](https://bitbucket.org/braindynamicslab/dyneusr/),
 
 	git clone https://bitbucket.org/braindynamicslab/dyneusr/ ~
 	cd ~/dyneusr
-	git checkout -b v0.2.0 tags/0.2.0
+	git checkout -b v0.2.2 tags/0.2.2
 	pip install -e . -r requirements.txt
 
 Note, you can replace the `~` with any path to install the `dyneusr` source code.
