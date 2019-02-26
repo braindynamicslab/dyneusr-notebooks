@@ -26,9 +26,24 @@ import matplotlib.pyplot as plt
 
 
 ###############################################################################        
+### some global meta variables
+###############################################################################        
+TARGET_NAMES = [
+	'rest', 
+	'scissors', 
+	'face', 
+	'cat', 
+	'shoe', 
+	'house', 
+	'scrambledpix',
+	'bottle', 
+	'chair'
+	]
+
+###############################################################################        
 ### loading (per-subject)
 ###############################################################################        
-def load_subject_data(dataset, index=0, mask='mask_vt', sample_mask=None,  **kwargs):
+def load_subject_data(dataset, index=0, mask='mask_vt', sample_mask=None, smoothing_fwhm=4, **kwargs):
     """ Load functional data for a single haxby subject. """
     # extract relevant files
     func_fn = dataset.func[index]
@@ -39,7 +54,7 @@ def load_subject_data(dataset, index=0, mask='mask_vt', sample_mask=None,  **kwa
     # extract data from func using mask_vt
     masker = NiftiMasker(
         mask_img=mask_fn, sample_mask=sample_mask,
-        standardize=True, detrend=True, smoothing_fwhm=4,
+        standardize=True, detrend=True, smoothing_fwhm=smoothing_fwhm,
         low_pass=0.09, high_pass=0.008, t_r=2.5,
         memory="nilearn_cache",
         )
@@ -63,7 +78,7 @@ def load_subject_meta(dataset, index=0, sessions=None, targets=None, **kwargs):
     
     # load target information as string and give a numerical identifier to each
     meta = pd.read_csv(dataset.session_target[index], sep=" ")
-
+    
     # condition mask
     sessions = sessions or list(set(meta.chunks)) 
     targets = targets or list(set(meta.labels))
@@ -75,7 +90,9 @@ def load_subject_meta(dataset, index=0, sessions=None, targets=None, **kwargs):
 
     # mask, extract, factorize
     target, session = meta.labels, meta.chunks
-    target, target_names = pd.factorize(target)
+    #target, target_names = pd.factorize(target)
+    target_names = np.ravel(TARGET_NAMES)
+    target = np.stack(map(TARGET_NAMES.index, target))
     meta = meta.assign(session=session, target=target)
 
     # convert y to one-hot encoding
