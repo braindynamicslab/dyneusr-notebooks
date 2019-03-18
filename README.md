@@ -1,53 +1,72 @@
-dyneusr-notebooks
-=================
+# DyNeuSR Notebooks
+-------------------
 
-[DyNeuSR-Notebooks](https://bitbucket.org/braindynamicslab/dyneusr-notebooks/) is a public repository of Jupyter notebook tutorials based on [DyNeuSR](https://bitbucket.org/braindynamicslab/dyneusr/).
+DyNeuSR Notebooks is a collection of Jupyter notebook tutorials based on [DyNeuSR](https://bitbucket.org/braindynamicslab/dyneusr/).
 
+From the [DyNeuSR/REAME.md](https://bitbucket.org/braindynamicslab/dyneusr/README.md):
 
-Important links
-===============
+> DyNeuSR is a Python visualization library for topological representations of neuroimaging data. It was designed specifically for working with shape graphs produced by the Mapper algorithm from topological data analysis (TDA) as described in the paper ["Towards a new approach to reveal dynamical organization of the brain using topological data analysis"](https://www.nature.com/articles/s41467-018-03664-4) (Saggar et al., 2018). See this [blog post](https://bdl.stanford.edu/blog/tda-cme-paper/) for more about the initial work that inspired the development of DyNeuSR.  
 
-- Official DyNeuSR source code repo: https://bitbucket.org/braindynamicslab/dyneusr/
-- Official DyNeuSR-Notebooks repo: https://bitbucket.org/braindynamicslab/dyneusr-notebooks/
-
-
-Dependencies
-============
-
-These notebooks are based on [DyNeuSR](https://bitbucket.org/braindynamicslab/dyneusr/), and the required dependencies include: 
-
-* [DyNeuSR](https://bitbucket.org/braindynamicslab/dyneusr/) == 0.2.2
-* [Kepler-Mapper](https://github.com/MLWave/kepler-mapper) >= 1.1.5
-
-For a full list of requirements, see: `requirements.txt`
+> DyNeuSR connects the Mapper algorithm (e.g., [KeplerMapper](https://kepler-mapper.scikit-tda.org)), with network analysis tools (e.g., [NetworkX](https://networkx.github.io/)) and other neuroimaging data visualization libraries (e.g., [Nilearn](https://nilearn.github.io/)). It provides a high-level interface for interacting with shape graph representations of neuroimaging data and relating such representations back to neurophysiology.
 
 
-Install
-=======
 
-To clone and install [DyNeuSR](https://bitbucket.org/braindynamicslab/dyneusr/), run the following commands in a command prompt:
-
-	git clone https://bitbucket.org/braindynamicslab/dyneusr/ ~
-	cd ~/dyneusr
-	git checkout -b v0.2.2 tags/0.2.2
-	pip install -e . -r requirements.txt
-
-Note, you can replace the `~` with any path to install the `dyneusr` source code.
-
-For more detailed installation instructions, see: https://bitbucket.org/braindynamicslab/dyneusr/README.md
-
-
-Usage
-=====
+## Usage
+--------
 
 To view a Jupyter notebook example, you can run the following command in a command prompt:
+```bash
+jupyter notebook [notebook.ipynb]
+```
 
-	jupyter notebook [notebook.ipynb]
+For example, to view the `01_trefoil_knot` notebook, just run:
+```bash
+jupyter notebook 01_trefoil_knot/01_trefoil_knot.ipynb
+```
 
 
-For example, to view the `01_trefoil_knot` notebook, run the following commands in a command prompt:
 
-	cd 01_trefoil_knot
-	jupyter notebook 01_trefoil_knot.ipynb
+## Install
+----------
 
+These notebooks are based on [DyNeuSR](https://bitbucket.org/braindynamicslab/dyneusr/). 
+
+### Dependencies
+
+- Python 3.6+
+
+The latest versions of the following packages are required:
+
+-  [dyneusr](https://bitbucket.org/braindynamicslab/dyneusr/) == 0.2.2
+-  [kmapper](kepler-mapper.scikit-tda.org)
+
+For the full list, see [`requirements.txt`](https://bitbucket.org/braindynamicslab/dyneusr-notebooks/requirements.txt)
+
+
+### Installation
+
+To clone and install [DyNeuSR](https://bitbucket.org/braindynamicslab/dyneusr/):
+```bash
+git clone https://bitbucket.org/braindynamicslab/dyneusr.git
+cd dyneusr
+git checkout -b v0.2.2 tags/0.2.2
+pip install -e . -r requirements.txt
+```
+
+For more detailed installation instructions, see [DyNeuSR/README.md](https://bitbucket.org/braindynamicslab/dyneusr/README.md)
+
+
+
+
+## Support
+----------
+
+Please [submit](https://bitbucket.org/braindynamicslab/dyneusr/issues/new) any bugs or questions to the Bitbucket issue tracker.
+
+
+
+## Cite
+-------
+
+(*coming soon*)
 
