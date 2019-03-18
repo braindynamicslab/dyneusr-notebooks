@@ -3,7 +3,7 @@
 
 DyNeuSR Notebooks is a collection of Jupyter notebook tutorials based on [DyNeuSR](https://bitbucket.org/braindynamicslab/dyneusr/).
 
-From the [DyNeuSR/REAME.md](https://bitbucket.org/braindynamicslab/dyneusr/README.md):
+From the [DyNeuSR/REAME.md](https://bitbucket.org/braindynamicslab/dyneusr/src/master/README.md):
 
 > DyNeuSR is a Python visualization library for topological representations of neuroimaging data. It was designed specifically for working with shape graphs produced by the Mapper algorithm from topological data analysis (TDA) as described in the paper ["Towards a new approach to reveal dynamical organization of the brain using topological data analysis"](https://www.nature.com/articles/s41467-018-03664-4) (Saggar et al., 2018). See this [blog post](https://bdl.stanford.edu/blog/tda-cme-paper/) for more about the initial work that inspired the development of DyNeuSR.  
 >
@@ -37,7 +37,7 @@ The latest versions of the following packages are required:
 -  [dyneusr](https://bitbucket.org/braindynamicslab/dyneusr/) == 0.2.2
 -  [kmapper](kepler-mapper.scikit-tda.org)
 
-For the full list, see [`requirements.txt`](https://bitbucket.org/braindynamicslab/dyneusr-notebooks/requirements.txt)
+For the full list, see [`requirements.txt`](https://bitbucket.org/braindynamicslab/dyneusr-notebooks/src/master/requirements.txt)
 
 
 ### Installation
@@ -50,7 +50,7 @@ git checkout -b v0.2.2 tags/0.2.2
 pip install -e . -r requirements.txt
 ```
 
-For more detailed installation instructions, see [DyNeuSR/README.md](https://bitbucket.org/braindynamicslab/dyneusr/README.md)
+For more detailed installation instructions, see [DyNeuSR/README.md](https://bitbucket.org/braindynamicslab/dyneusr/src/master/README.md)
 
 
 
