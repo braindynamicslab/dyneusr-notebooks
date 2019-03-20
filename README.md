@@ -35,7 +35,7 @@ jupyter notebook 01_trefoil_knot/01_trefoil_knot.ipynb
 The latest versions of the following packages are required:
 
 -  [dyneusr](https://bitbucket.org/braindynamicslab/dyneusr/) == 0.2.2
--  [kmapper](kepler-mapper.scikit-tda.org)
+-  [kmapper](kepler-mapper.scikit-tda.org) == 1.1.6
 
 For the full list, see [`requirements.txt`](https://bitbucket.org/braindynamicslab/dyneusr-notebooks/src/master/requirements.txt)
 
@@ -47,7 +47,7 @@ To clone and install [DyNeuSR](https://bitbucket.org/braindynamicslab/dyneusr/):
 git clone https://bitbucket.org/braindynamicslab/dyneusr.git
 cd dyneusr
 git checkout -b v0.2.2 tags/0.2.2
-pip install -e . -r requirements.txt
+pip install -e .
 ```
 
 For more detailed installation instructions, see [DyNeuSR/README.md](https://bitbucket.org/braindynamicslab/dyneusr/src/master/README.md)
