@@ -1,2 +1,2 @@
-dyneusr==0.2.2
-kmapper==1.1.6
+dyneusr==0.2.3
+kmapper==1.2.0

@@ -121,6 +121,8 @@ def load_subject_meta(dataset, index=0, sessions=None, targets=None, **kwargs):
     subject = Bunch()
     subject.meta = meta.loc[condition_mask]
     subject.target = target.loc[condition_mask]
+    subject.y = subject.meta.target
+    subject.groups = subject.meta.session
     subject.condition_mask = condition_mask
     subject.target_names = list(target_names)
     subject.target_colors = list(target_colors_hex)
@@ -143,6 +145,7 @@ def load_subject(dataset, index=0, **kwargs):
 
     # mask data
     data.data = data.data.loc[meta.condition_mask]
+    data.X = data.data.values.copy()
     #data.meta = data.meta.loc[meta.condition_mask]
     #data.target = data.target.loc[meta.condition_mask]
 
