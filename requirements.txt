@@ -1,2 +1,4 @@
-dyneusr==0.2.3
+jupyter
 kmapper==1.2.0
+dyneusr==0.2.3
+

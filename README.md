@@ -34,8 +34,9 @@ jupyter notebook 01_trefoil_knot/01_trefoil_knot.ipynb
 
 The latest versions of the following packages are required:
 
--  [dyneusr](https://bitbucket.org/braindynamicslab/dyneusr/) == 0.2.3
+-  [jupyter](jupyter.org)
 -  [kmapper](kepler-mapper.scikit-tda.org) == 1.2.0
+-  [dyneusr](bitbucket.org/braindynamicslab/dyneusr) == 0.2.3
 
 For the full list, see [`requirements.txt`](https://bitbucket.org/braindynamicslab/dyneusr-notebooks/src/master/requirements.txt)
 
