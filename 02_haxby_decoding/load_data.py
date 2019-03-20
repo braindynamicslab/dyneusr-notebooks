@@ -92,7 +92,7 @@ def load_subject_meta(dataset, index=0, sessions=None, targets=None, **kwargs):
     target, session = meta.labels, meta.chunks
     #target, target_names = pd.factorize(target)
     target_names = np.ravel(TARGET_NAMES)
-    target = np.stack(map(TARGET_NAMES.index, target))
+    target = np.stack(list(map(TARGET_NAMES.index, target)))
     meta = meta.assign(session=session, target=target)
 
     # convert y to one-hot encoding
