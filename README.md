@@ -66,5 +66,5 @@ Please [submit](https://github.com/braindynamicslab/dyneusr-notebooks/issues/new
 ## Cite
 -------
 
-(*In Press*)
+(*in press*)
 
