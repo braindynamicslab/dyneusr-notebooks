@@ -1,17 +1,17 @@
 # DyNeuSR Notebooks
--------------------
 
 DyNeuSR Notebooks is a collection of Jupyter notebook tutorials based on [DyNeuSR](https://github.com/braindynamicslab/dyneusr/).
 
 From the [DyNeuSR/REAME.md](https://github.com/braindynamicslab/dyneusr/blob/master/README.md):
 
-> DyNeuSR is a Python visualization library for topological representations of neuroimaging data. It was designed specifically for working with shape graphs produced by the Mapper algorithm from topological data analysis (TDA) as described in the paper ["Towards a new approach to reveal dynamical organization of the brain using topological data analysis"](https://www.nature.com/articles/s41467-018-03664-4) (Saggar et al., 2018). See this [blog post](https://bdl.stanford.edu/blog/tda-cme-paper/) for more about the initial work that inspired the development of DyNeuSR.  
+> DyNeuSR is a Python visualization library for topological representations of neuroimaging data. 
 >
-> DyNeuSR connects the Mapper algorithm (e.g., [KeplerMapper](https://kepler-mapper.scikit-tda.org)), with network analysis tools (e.g., [NetworkX](https://networkx.github.io/)) and other neuroimaging data visualization libraries (e.g., [Nilearn](https://nilearn.github.io/)). It provides a high-level interface for interacting with shape graph representations of neuroimaging data and relating such representations back to neurophysiology.
+> DyNeuSR connects the Mapper algorithm (e.g., [KeplerMapper](https://kepler-mapper.scikit-tda.org)) with network analysis tools (e.g., [NetworkX](https://networkx.github.io/)) and other neuroimaging data visualization libraries (e.g., [Nilearn](https://nilearn.github.io/)). It provides a high-level interface for interacting with shape graph representations of neuroimaging data and relating such representations back to neurophysiology.
+>
+> This package was designed specifically for working with shape graphs produced by the Mapper algorithm from topological data analysis (TDA) as described in the paper ["Towards a new approach to reveal dynamical organization of the brain using topological data analysis"](https://www.nature.com/articles/s41467-018-03664-4) (Saggar et al., 2018). See this [blog post](https://bdl.stanford.edu/blog/tda-cme-paper/) for more about the initial work that inspired the development of DyNeuSR.  
 
 
 ## Usage
---------
 
 To view a Jupyter notebook example, you can run the following command in a command prompt:
 ```bash
@@ -26,11 +26,10 @@ jupyter notebook 01_trefoil_knot/01_trefoil_knot.ipynb
 
 
 ## Install
-----------
 
 ### Dependencies
 
-- Python 3.6+
+- Python 3.6
 
 The latest versions of the following packages are required:
 
@@ -57,14 +56,12 @@ For more detailed installation instructions, see [DyNeuSR/README.md](https://git
 
 
 ## Support
-----------
 
-Please [submit](https://github.com/braindynamicslab/dyneusr-notebooks/issues/new) any bugs or questions to the Bitbucket issue tracker.
-
+Please feel free to [report](https://github.com/braindynamicslab/dyneusr-notebooks/issues/new) any issues, [request](https://github.com/braindynamicslab/dyneusr-notebooks/issues/new) examples, or [add](https://github.com/braindynamicslab/dyneusr-notebooks/compare) new tutorials.
 
 
-## Cite
--------
 
-(*in press*)
+## Citing DyNeuSR
+
+>Geniesse C, Sporns O, Petri G, & Saggar M. [Generating dynamical neuroimaging spatiotemporal representations (DyNeuSR) using topological data analysis](). _In press_, 2019.
 
