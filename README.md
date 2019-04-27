@@ -23,7 +23,7 @@ jupyter notebook 01_trefoil_knot/01_trefoil_knot.ipynb
 
 
 
-## Install
+## Setup
 
 ### Dependencies
 
