@@ -40,6 +40,6 @@ Please feel free to [report](https://github.com/braindynamicslab/dyneusr-noteboo
 
 ## Citing DyNeuSR
 
-If you use DyNeuSR in your published work, please cite:
+If you find DyNeuSR useful in your research, please consider citing:
 
 > Geniesse, C., Sporns, O., Petri, G., & Saggar, M. (2019). [Generating dynamical neuroimaging spatiotemporal representations (DyNeuSR) using topological data analysis](https://www.mitpressjournals.org/doi/abs/10.1162/netn_a_00093). *Network Neuroscience*. Advance publication. doi:10.1162/netn_a_00093
