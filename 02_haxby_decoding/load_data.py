@@ -57,7 +57,7 @@ def load_subject_data(dataset, index=0, mask='mask_vt', sample_mask=None, smooth
         standardize=True, detrend=True, smoothing_fwhm=4.0,
         low_pass=0.09, high_pass=0.008, t_r=2.5,
         memory="nilearn_cache")
-    X = masker.fit_transform(func_fn)s
+    X = masker.fit_transform(func_fn)
     data = pd.DataFrame(X)    
     
     # return as bunch
