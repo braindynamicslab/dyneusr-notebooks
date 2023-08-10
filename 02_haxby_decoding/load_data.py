@@ -12,7 +12,7 @@ import numpy as np
 import pandas as pd
 import scipy as sp
 
-from sklearn.datasets.base import Bunch
+from sklearn.utils import Bunch
 from sklearn.preprocessing import LabelEncoder, OneHotEncoder
 
 from nilearn.datasets import fetch_haxby
@@ -53,12 +53,11 @@ def load_subject_data(dataset, index=0, mask='mask_vt', sample_mask=None, smooth
 
     # extract data from func using mask_vt
     masker = NiftiMasker(
-        mask_img=mask_fn, sample_mask=sample_mask,
-        standardize=True, detrend=True, smoothing_fwhm=smoothing_fwhm,
+        dataset.mask_vt[0], 
+        standardize=True, detrend=True, smoothing_fwhm=4.0,
         low_pass=0.09, high_pass=0.008, t_r=2.5,
-        memory="nilearn_cache",
-        )
-    X = masker.fit_transform(func_fn)
+        memory="nilearn_cache")
+    X = masker.fit_transform(func_fn)s
     data = pd.DataFrame(X)    
     
     # return as bunch
