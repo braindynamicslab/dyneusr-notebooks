@@ -186,7 +186,7 @@ def load_haxby(subjects=-1, verbose=0, **kwargs):
     haxby = fetch_haxby(subjects=subjects, fetch_stimuli=True)
     
     # encode description
-    haxby.description = bytes(haxby.description).decode('utf-8')
+    haxby.description = bytes(haxby.description, encoding='utf-8')
     if verbose > 2:
         print(haxby.description)
     
