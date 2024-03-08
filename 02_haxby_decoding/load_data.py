@@ -96,7 +96,7 @@ def load_subject_meta(dataset, index=0, sessions=None, targets=None, **kwargs):
 
     # convert y to one-hot encoding
     from sklearn.preprocessing import OneHotEncoder
-    encoder = OneHotEncoder(handle_unknown='ignore', sparse=False)
+    encoder = OneHotEncoder(handle_unknown='ignore', sparse_output=False)
     y = encoder.fit_transform(np.c_[target])
     target = pd.DataFrame(y, columns=target_names)
 
